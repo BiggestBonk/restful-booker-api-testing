@@ -30,9 +30,9 @@ PS: In order to make this suite feel more accurate to a real world project, the 
 
 In order for it to run locally, create a `.env` file in the project root with the following values:
 
-BASE_URL=https://restful-booker.herokuapp.com
-BOOKER_USERNAME='admin'
-BOOKER_PASSWORD='password123'
+BASE_URL=https://restful-booker.herokuapp.com<br>
+BOOKER_USERNAME='admin'<br>
+BOOKER_PASSWORD='password123'<br>
 
 ### Running Tests
 ```bash
