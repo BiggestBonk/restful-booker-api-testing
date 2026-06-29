@@ -50,7 +50,7 @@ test('Should return all bookingids', async ({request}) =>
     expect(responseBody[0]).toHaveProperty('bookingid')
     expect(responseBody[5]).toHaveProperty('bookingid')
 })
-test('Should return the details for a specific booking', async ({request}) =>
+test('Should return the details of the created booking', async ({request}) =>
 {
     const response = await request.get(`/booking/${bookingId}`)
     const responseBody = await response.json()
@@ -58,7 +58,7 @@ test('Should return the details for a specific booking', async ({request}) =>
     expect(responseBody).toHaveProperty('firstname')
     expect(responseBody.lastname).toBe('Bezos')
 })
-test('Should update the details of a specific booking', async ({request}) => {
+test('Should update the details of the created booking', async ({request}) => {
     const response = await request.put(`/booking/${bookingId}`,{
         headers: {
             'Content-Type':'application/json',
@@ -82,10 +82,10 @@ test('Should update the details of a specific booking', async ({request}) => {
     expect(responseBody.firstname).toBe('Jeffrey')
     expect(responseBody.additionalneeds).toBe('A monopoly over American consumer products')
 })
-test('Should partially change the details of a booking', async ({request}) => {
+test('Should partially change the details of the created booking', async ({request}) => {
     const response = await request.patch(`/booking/${bookingId}`, {
         headers: {
-            'Content-type':'application/json',
+            'Content-Type':'application/json',
             'Accept':'application/json',
             'Cookie': `token=${token}`
         },
@@ -98,4 +98,14 @@ test('Should partially change the details of a booking', async ({request}) => {
     expect(response.status()).toBe(200)
     expect(responseBody.firstname).toBe('Geoffrey')
     expect(responseBody.lastname).toBe('Moneybags') 
+})
+test('Should delete the created booking', async ({request}) => {
+    const response = await request.delete(`/booking/${bookingId}`, {
+        headers: {
+            'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Cookie':`token=${token}`
+        }
+    })
+    expect(response.status()).toBe(201)
 })
