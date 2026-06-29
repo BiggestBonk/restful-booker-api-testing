@@ -18,7 +18,7 @@ test.beforeAll(async ({ request }) => {
     token = authBody.token
 })
 test('Should create a new booking', async ({request})=> {
-    const bookingResponse = await request.post('/booking', {
+    const response = await request.post('/booking', {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -35,13 +35,18 @@ test('Should create a new booking', async ({request})=> {
             additionalneeds: "Better margins"
         }
     })
-    const bookingBody = await bookingResponse.json()
-    bookingId = bookingBody.bookingid
+    const responseBody = await response.json()
+    bookingId = responseBody.bookingid
+    expect(response.status()).toBe(200)
+    expect(responseBody.booking.depositpaid).toBe(true)
+    expect(responseBody.booking.additionalneeds).toBe('Better margins')
+    
 })
 test('Should return all bookingids', async ({request}) =>
 {
     const response = await request.get('/booking')
     const responseBody = await response.json()
+    expect(response.status()).toBe(200)
     expect(responseBody[0]).toHaveProperty('bookingid')
     expect(responseBody[5]).toHaveProperty('bookingid')
 })
@@ -49,6 +54,7 @@ test('Should return the details for a specific booking', async ({request}) =>
 {
     const response = await request.get(`/booking/${bookingId}`)
     const responseBody = await response.json()
+    expect(response.status()).toBe(200)
     expect(responseBody).toHaveProperty('firstname')
     expect(responseBody.lastname).toBe('Bezos')
 })
@@ -72,6 +78,24 @@ test('Should update the details of a specific booking', async ({request}) => {
         }
     })
     const responseBody = await response.json()
+    expect(response.status()).toBe(200)
     expect(responseBody.firstname).toBe('Jeffrey')
     expect(responseBody.additionalneeds).toBe('A monopoly over American consumer products')
+})
+test('Should partially change the details of a booking', async ({request}) => {
+    const response = await request.patch(`/booking/${bookingId}`, {
+        headers: {
+            'Content-type':'application/json',
+            'Accept':'application/json',
+            'Cookie': `token=${token}`
+        },
+        data: {
+            'firstname':'Geoffrey',
+            'lastname':'Moneybags'
+        }
+    })
+    const responseBody = await response.json()
+    expect(response.status()).toBe(200)
+    expect(responseBody.firstname).toBe('Geoffrey')
+    expect(responseBody.lastname).toBe('Moneybags') 
 })
