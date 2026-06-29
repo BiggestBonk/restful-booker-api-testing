@@ -8,6 +8,10 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      BASE_URL : ${{secrets.BASE_URL}}
+      BOOKER_USERNAME : ${{secrets.BOOKER_USERNAME}}
+      BOOKER_PASSWORD : ${{secrets.BOOKER_PASSWORD}}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
